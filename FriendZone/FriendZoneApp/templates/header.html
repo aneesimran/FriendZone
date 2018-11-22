@@ -12,18 +12,23 @@
         </style>
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
-    <body>
+    <body style="background-color:lightblue">
 
-    <div class="container" style="background-color:lightblue">
-        <div id = "logoStyle"><img src = "https://diylogodesigns.com/wp-content/uploads/2016/05/adidas-new-logo-Transparent-Background.png"
-        height = 100></div>
-        <h1>{{ pageTitle }}</h1>
-        <div id = "loginContainer">
+    <div class="container">
+        <div id = "logoStyle">
+            <img src = "https://diylogodesigns.com/wp-content/uploads/2016/05/adidas-new-logo-Transparent-Background.png"
+            height = 100>
+            <text id='title'>{{ pageTitle }}</text>
         </div>
-
+        <div id=''headerLinks>
+            <ul id='links'> 
+                <li> ghana </li> <li> cool </li> <li> i am happy </li>
+            </ul>
+        </div>
+    
     </div>
+
     {% block content %}
     {% endblock %}
-    	<br>
     </body>
 </html>

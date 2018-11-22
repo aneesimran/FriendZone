@@ -1,6 +1,15 @@
-
-#logoStyle
-{
-    margin: 40px;
+#logoStyle{
     background-color: red;
+}
+
+#title{
+    position: relative;
+    left: 620px;
+    bottom: 30px;
+    font-size: 40pt;
+    font-weight: 400;
+}
+
+ul#links{
+    display: inline;
 }
