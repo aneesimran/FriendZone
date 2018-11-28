@@ -12,7 +12,7 @@
         </style>
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
-    <body style="background-color:darkblue">
+    <body style="background-color:teal">
 
     <div class="container" id = "headerBar">
         <div id = "logoStyle">
@@ -23,6 +23,14 @@
         <p id="title">{{ pageTitle }}</p>
 
 
+    </div>
+
+    <div>
+        {% if user.is_authenticated %}
+            <p>Welcome!</p>
+        {% else %}
+            <p>You need to login</p>
+        {% endif %}
     </div>
 
     {% block content %}

@@ -1,6 +1,15 @@
 {% extends "header.html" %}
 {% block content %}
 
-    <h2>Nasir = Muslim Gulshan Islam and {{ pageTitle }}</h2>
-
+<form method='POST' >
+ {% csrf_token %}
+    <span class='fieldname'>Username</span>
+    <input type='text' maxlength='16' id='logusername' name='username'>
+    <span id='info'></span>
+    <br>
+    <span class='fieldname'>Password</span>
+    <input type='password' maxlength='16' name='password'><br>
+    <span class='fieldname'>&nbsp;</span>
+    <input type='submit' value='Login'>
+</form>
 {% endblock %}
