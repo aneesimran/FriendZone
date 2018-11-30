@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 def index(request):
-    return render (request, 'index.html', {'content': 'ghana'})
+    return render (request, 'FriendZoneApp/index.html', {'content': 'ghana'})
 
 @csrf_exempt
 def register(request):
