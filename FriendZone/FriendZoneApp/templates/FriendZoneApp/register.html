@@ -1,9 +1,9 @@
-{% extends "FriendZoneApp/header.html" %}
+{% extends "header.html" %}
 
 {% block content %}
 
     <h2> {{ pageTitle }} - Sign Up</h2>
-    <form class="login-form" action="{% url 'fz:register' %}" method="POST">
+    <form class="login-form" action="/register/" method="POST">
         {% csrf_token %}
         {{ form }}
         <input type="submit" value="Register">
