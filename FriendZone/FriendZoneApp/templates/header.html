@@ -20,12 +20,17 @@
             height = 100>
         </div>
 
-        <p id="title">{{ pageTitle }}</p>
-
-
+        <p id="title">{{ pageTitle }}</p>        
     </div>
+
+    {% if user.is_authenticated %}
+        <p>Welcome !!!</p>   
+    {% else %}
+        <p>log in biatch</p>    
+    {% endif %}
 
     {% block content %}
     {% endblock %}
+    
     </body>
 </html>
