@@ -4,9 +4,9 @@ from.import views
 app_name='fz'
 
 urlpatterns = [
-    path('', views.register),
+    path('', views.login_view),
     path('register/', views.register, name='register'),
     path('index/', views.index, name='index'),
-    #path('login/', views.login_view, name='login'),
-    
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout')
 ]

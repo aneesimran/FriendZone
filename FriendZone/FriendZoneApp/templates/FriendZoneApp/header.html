@@ -12,15 +12,31 @@
         </style>
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
+
     <body style="background-color:teal">
 
     <div class="container" id = "headerBar">
         <div id = "logoStyle">
-            <img src = "https://diylogodesigns.com/wp-content/uploads/2016/05/adidas-new-logo-Transparent-Background.png"
-            height = 100>
+            <img src = "{% static 'logo.png' %}" height = 100>
         </div>
 
-        <p id="title">{{ pageTitle }}</p>        
+        <p id="title">FriendZone {{ pageTitle }}  </p>     
+
+        <nav id='navlinks'> 
+            <a href="">Link 1 </a> &nbsp; 
+            {% if user.is_authenticated %}
+            {% else %}
+                <a href="/register/">Sign Up </a> &nbsp; 
+            {% endif %}
+            <a href="">Link 3 </a> 
+            
+            <form class='logout-link' action="/logout/" method='POST'> 
+                {% csrf_token %}
+                {% if user.is_authenticated %}
+                    <button type="submit" class="logoutButton"> Log out Now Bitch </button>
+                {% endif %}
+            </form> 
+        </nav>     
     </div>
 
     {% if user.is_authenticated %}

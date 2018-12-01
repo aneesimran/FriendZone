@@ -24,5 +24,19 @@
     padding-top: 1%;
     margin-top: -3%;
     height: 125px;
+}
 
+#navlinks
+{
+    margin-top: -5%;
+    font-size: 25px;
+    float: right;
+}
+
+#logoutButton{
+    float: right;
+}
+
+#navlinks{
+    padding: 10px;
 }
