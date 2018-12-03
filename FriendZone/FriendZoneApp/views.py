@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login, logout
+from FriendZoneApp.models import UserProfileModel
 
 # Create your views here.
 def index(request):
@@ -13,6 +14,7 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            UserProfileModel.objects.create(user = user)
             login(request, user)
             #log user in !
             return redirect('/index/')

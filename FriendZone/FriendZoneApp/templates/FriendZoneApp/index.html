@@ -1,7 +1,37 @@
 {% extends "FriendZoneApp/header.html" %}
 {% block content %}
 
-    <h1>This is the index page cdjfhdfuh</h1>
-    <p> {{content}}</p>
+    {% if loggedin %}
+        <table>
+            <tr>
+                <td>
+                    {% if profile.image %}
+                        <img></img>
+                    {% else %}
+                        <img></img>
+                    {% endif %}
+                </td>
+                <td>
+                </td>
+            </tr>
+        </table>
+
+    {% else %}
+
+        <br>
+        <br>
+    {% endif %}
+
+
+        <table border="solid">
+            <tr>
+                <td>Name</td>
+                <td>Hobbies</td>
+                <td>Add Friend</td>
+            </tr>
+        </table>
+
+
+
 
 {% endblock %}

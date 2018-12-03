@@ -1,13 +1,17 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 # Create your models here.
-class UserProfile(models.Model):
-    userName = models.CharField(max_length = 150)
-    password = models.CharField(max_length = 30)
-    userProfilePic = models.ImageField()
-    email = models.EmailField()
 
-class Profile(models.Model):
-    bio = models.CharField(max_length = 2000)
-    image = models.ImageField(upload_to = 'profile_image')
+class UserProfileModel(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    gender = models.CharField(max_length = 1, choices = (('M', 'Male'), ('f', 'Female')), blank = True)
+    age = models.PositiveIntegerField(blank = True, null = True)
+
+    def __str__(self):
+        return self.user.username
+    
+    class Meta:
+        verbose_name = 'Profile'
+        verbose_name_plural = 'Profiles'
