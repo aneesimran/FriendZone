@@ -8,7 +8,9 @@ class UserProfileModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     gender = models.CharField(max_length = 1, choices = (('M', 'Male'), ('f', 'Female')), blank = True)
     age = models.PositiveIntegerField(blank = True, null = True)
-    
+    image = models.ImageField(upload_to='profile_images')
+    dob = models.DateField(blank = True, null = True)
+    email = models.EmailField(blank = True, unique = True)
 
 
     def __str__(self):

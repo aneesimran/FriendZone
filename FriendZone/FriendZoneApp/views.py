@@ -5,11 +5,13 @@ from django.contrib.auth import login, logout
 from FriendZoneApp.models import UserProfileModel
 from django.template import loader
 from django.http import HttpResponse
+from django.contrib.auth.models import User
 
 # Create your views here.
 def index(request):
+    members = User.objects.exclude(id = request.user.id)
     context = {
-        'members' : UserProfileModel.objects.all()
+        'members' : members
     }
     return render(request, 'FriendZoneApp/index.html', context)
 
