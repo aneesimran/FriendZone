@@ -14,8 +14,8 @@
                 <td>
                 </td>
             </tr>
+        
         </table>
-
     {% else %}
 
         <br>
@@ -24,14 +24,13 @@
 
 
         <table border="solid">
+        {% for member in members %}
             <tr>
-                <td>Name</td>
+                <td>{{ member }}</td>
                 <td>Hobbies</td>
                 <td>Add Friend</td>
             </tr>
+        {% endfor %}
         </table>
-
-
-
 
 {% endblock %}

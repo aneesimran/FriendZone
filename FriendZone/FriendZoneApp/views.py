@@ -3,10 +3,15 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login, logout
 from FriendZoneApp.models import UserProfileModel
+from django.template import loader
+from django.http import HttpResponse
 
 # Create your views here.
 def index(request):
-    return render (request, 'FriendZoneApp/index.html', {'pageTitle': ''})
+    context = {
+        'members' : UserProfileModel.objects.all()
+    }
+    return render(request, 'FriendZoneApp/index.html', context)
 
 @csrf_exempt
 def register(request):
@@ -40,3 +45,4 @@ def logout_view(request):
     if request.method == 'POST':
         logout(request)
         return redirect('/login/')
+
