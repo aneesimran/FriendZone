@@ -9,10 +9,9 @@ from django.contrib.auth.models import User
 
 # Create your views here.
 def index(request):
-    loggedInUser = UserProfileModel.objects.get(id = request.user.id)
-
+    loggedInUser = UserProfileModel.objects.exclude(id = request.user.id)
     context = {
-        'members' : UserProfileModel.objects.all(),
+        'members' : loggedInUser,
         'loggedInUser' : loggedInUser
     }
     return render(request, 'FriendZoneApp/index.html', context)
@@ -51,5 +50,10 @@ def logout_view(request):
         return redirect('/login/')
 
 def profile_view(request):
-    return render(request, 'FriendZoneApp/profile.html')
+    profilePic = UserProfileModel.objects.get(id = request.user.id)
+    context = {
+        'profilePic' : profilePic,
+        
+    }
+    return render(request, 'FriendZoneApp/profile.html', context)
 
