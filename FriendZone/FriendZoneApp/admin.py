@@ -1,7 +1,8 @@
 from django.contrib import admin
-from FriendZoneApp.models import UserProfileModel
+from FriendZoneApp.models import UserProfileModel, Hobby
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ['user', 'gender', 'age', 'dob', 'email']
+    list_display = ['user', 'gender', 'age']
 
 admin.site.register(UserProfileModel, UserProfileAdmin)
+admin.site.register(Hobby)
