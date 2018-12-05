@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login, logout
-from FriendZoneApp.models import UserProfileModel
+from FriendZoneApp.models import UserProfileModel, Hobby
 from django.template import loader
 from django.http import HttpResponse
 
@@ -13,7 +13,7 @@ def index(request):
     }
     return render(request, 'FriendZoneApp/index.html', context)
 
-@csrf_exempt
+@csrf_exempt #need to get rid of this !!!
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
