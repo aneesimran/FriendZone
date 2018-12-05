@@ -9,9 +9,15 @@ from django.contrib.auth.models import User
 
 # Create your views here.
 def index(request):
-    members = UserProfileModel.objects.exclude(id = request.user.id)
+<<<<<<< HEAD
+    
+=======
+    loggedInUser = UserProfileModel.objects.get(id = request.user.id)
+
     context = {
-        'members' : members
+        'members' : UserProfileModel.objects.all(),
+        'loggedInUser' : loggedInUser
+>>>>>>> 66e2b77770e68f4c84f106969c36830b3c3e142c
     }
     return render(request, 'FriendZoneApp/index.html', context)
 
