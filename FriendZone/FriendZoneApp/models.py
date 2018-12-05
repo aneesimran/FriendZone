@@ -14,7 +14,8 @@ class UserProfileModel(models.Model):
     age = models.PositiveIntegerField(blank = True, null = True)
     image = models.ImageField(upload_to='profile_images', blank = True)
     dob = models.DateField(blank = True, null = True)
-    email = models.EmailField(blank = True, unique = True)
+    email = models.EmailField(blank = True)
+    #email = models.EmailField(blank = True, unique = True)
     hobby = models.ManyToManyField(Hobby, blank = True)
     
     def __str__(self):

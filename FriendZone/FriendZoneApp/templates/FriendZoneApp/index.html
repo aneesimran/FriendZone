@@ -25,11 +25,8 @@
 
         <table border="solid">
         {% for member in members %}
-        {% for h in member.hobby.all %}
-            {{ h.hobby }}
-            {% endfor %}
             <tr>
-                <td>MEmber: {{ member.user }}</td>
+                <td>Member: {{ member }}</td>
                 <td>Hobbies: 
                     {% for h in member.hobby.all %} 
                         {{ h.hobby }}
