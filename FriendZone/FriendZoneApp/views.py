@@ -8,8 +8,11 @@ from django.http import HttpResponse
 
 # Create your views here.
 def index(request):
+    loggedInUser = UserProfileModel.objects.get(id = request.user.id)
+
     context = {
-        'members' : UserProfileModel.objects.all()
+        'members' : UserProfileModel.objects.all(),
+        'loggedInUser' : loggedInUser
     }
     return render(request, 'FriendZoneApp/index.html', context)
 
