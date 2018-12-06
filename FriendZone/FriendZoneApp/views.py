@@ -52,8 +52,34 @@ def logout_view(request):
 def profile_view(request):
     profilePic = UserProfileModel.objects.get(id = request.user.id)
     context = {
-        'profilePic' : profilePic,
-        
+        'profilePic' : profilePic
     }
     return render(request, 'FriendZoneApp/profile.html', context)
 
+
+
+
+
+
+
+#def index(request):
+ #   loggedInUser = UserProfileModel.objects.get(id = request.user.id)  // get the user that is logged in
+  #  loggedInUserHobbies = loggedInUser.hobby // get logged in users all hobbies // .hobby is from class UserProfileModel
+   # otherUsers = UserProfileModel.objects.exclude(id = request.user.id)  //get all users except the logged in one
+
+    #similarUsers = [] // create empty array
+
+    #for otherUser in otherUsers:
+     #   counter = 0
+      #  for h in otherUser.hobby:
+       #     if otherUser.hobby in loggedInUserHobbies:
+        #        counter++ // increment each time a user with same hobby is found, but reset counter when new user is checked
+            
+        #similarUsers.append(otherUser) // user has same Hobby(ies) as logged in user so we add it to the list
+
+    #sortedUsers = function // function to sort list of users, ordering by number of similar hobbies as loggedin user
+
+    #context = {
+     #   'members' : sortedUsers, // users will be displayed in the order in the index.html
+    #}
+    #return render(request, 'FriendZoneApp/index.html', context)
