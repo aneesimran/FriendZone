@@ -6,8 +6,10 @@ from FriendZoneApp.models import UserProfileModel, Hobby
 from django.template import loader
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserChangeForm
 
 # Create your views here.
+
 
 def index(request):
     user = request.user
@@ -63,6 +65,23 @@ def profile_view(request):
 
 
 
+def editprofile_view(request):
+    if request.method == 'POST':
+        form = UserChangeForm(request.POST, instance = request.user)
+
+        if form.is_valid():
+            form.save()
+            return render(request, 'FriendZoneApp/profile.html')
+
+    else:
+        form = UserChangeForm(instance = request.user)
+        args = {'form': form}
+        return render(request, 'FriendZoneApp/editprofile.html', args)
+
+    
+
+
+
 
 
 
@@ -84,7 +103,6 @@ def profile_view(request):
 
     #sortedUsers = function // function to sort list of users, ordering by number of similar hobbies as loggedin user
 
-<<<<<<< HEAD
 #def index(request):
 #    loggedInUser = UserProfileModel.objects.get(id = request.user.id) // get the user that is logged in
 #    loggedInUsersHobbies = loggedInUser.hobby // get logged in users all hobbies // .hobby is from class UserProfileModel
@@ -105,9 +123,7 @@ def profile_view(request):
 #        'members' : sortedUsers // users will be displayed in the order in the index.html
 #    }
 #    return render(request, 'FriendZoneApp/index.html', context)
-=======
     #context = {
      #   'members' : sortedUsers, // users will be displayed in the order in the index.html
     #}
     #return render(request, 'FriendZoneApp/index.html', context)
->>>>>>> 478fa7b1c91cba57a666e447e6b22a774c8c6c49
