@@ -8,11 +8,16 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 
 # Create your views here.
+
 def index(request):
-    loggedInUser = UserProfileModel.objects.exclude(id = request.user.id)
+    user = request.user
+    userProfile = UserProfileModel.objects.get(user = user)
+
+    similarUsers = [] 
+
     context = {
-        'members' : loggedInUser,
-        'loggedInUser' : loggedInUser
+        'loggedInUser' : user,
+        'userProfile' : userProfile 
     }
     return render(request, 'FriendZoneApp/index.html', context)
 
@@ -79,7 +84,30 @@ def profile_view(request):
 
     #sortedUsers = function // function to sort list of users, ordering by number of similar hobbies as loggedin user
 
+<<<<<<< HEAD
+#def index(request):
+#    loggedInUser = UserProfileModel.objects.get(id = request.user.id) // get the user that is logged in
+#    loggedInUsersHobbies = loggedInUser.hobby // get logged in users all hobbies // .hobby is from class UserProfileModel
+#    otherUsers = UserProfileModel.objects.exclude(id=request.user.id) // get all users except the logged in one
+#    
+#    similarUsers = []  // create empty array
+
+#    for otherUser in otherUsers:
+#       counter=0
+#       for h in otherUser.hobby:
+#           if otherUser.hobby in loggedInUserHobbies:
+#               counter++ // increment each time a user with same hobbie is found, but reset counter when new user checked
+#       similarUsers.append(otherUser) // user has same hobby(ies) as logged in user so we add it to list
+
+#    sortedUsers = function // function to sort list of users, ordering by number of similar hobbies as loggedin user
+
+#    context = {
+#        'members' : sortedUsers // users will be displayed in the order in the index.html
+#    }
+#    return render(request, 'FriendZoneApp/index.html', context)
+=======
     #context = {
      #   'members' : sortedUsers, // users will be displayed in the order in the index.html
     #}
     #return render(request, 'FriendZoneApp/index.html', context)
+>>>>>>> 478fa7b1c91cba57a666e447e6b22a774c8c6c49
