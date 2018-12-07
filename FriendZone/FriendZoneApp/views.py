@@ -14,14 +14,19 @@ from django.contrib.auth.forms import UserChangeForm
 def index(request):
     user = request.user
     userProfile = UserProfileModel.objects.get(user = user)
+    otherUserProfiles = UserProfileModel.objects.exclude(user = request.user)
 
-    similarUsers = [] 
+    similarUsers = []
+    
 
     context = {
         'loggedInUser' : user,
-        'userProfile' : userProfile 
+        'userProfile' : userProfile,
+        'oUP' : otherUserProfiles
     }
     return render(request, 'FriendZoneApp/index.html', context)
+
+
 
 @csrf_exempt #need to get rid of this !!!
 def register(request):
