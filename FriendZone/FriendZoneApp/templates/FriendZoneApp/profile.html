@@ -2,12 +2,16 @@
 {% block content %}
 
 
-<img src="{{ profilePic.image.url }}" width = "200">
+<img src="{{ userProfile.image.url }}" width = "200">
 
 <p>username: {{ user }}</p>
-<p>gender: {{ profilePic.gender }}</p>
-<p>age: {{ profilePic.age }}</p>
-<p>email: {{ profilePic.email }}</p>
+<p>gender: {{ userProfile.gender }}</p>
+<p>age: {{ userProfile.age }}</p>
+<p>email: {{ userProfile.email }}</p>
+
+{% for h in userProfile.hobby.all %}
+    <p>{{ h.hobby }}</p>
+{% endfor %}
 
 
 {% endblock %}

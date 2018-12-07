@@ -60,9 +60,9 @@ def logout_view(request):
         return redirect('/login/')
 
 def profile_view(request):
-    profilePic = UserProfileModel.objects.get(id = request.user.id)
+    userProfile = UserProfileModel.objects.get(id = request.user.id)
     context = {
-        'profilePic' : profilePic
+        'userProfile' : userProfile
     }
     return render(request, 'FriendZoneApp/profile.html', context)
 
