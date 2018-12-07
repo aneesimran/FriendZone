@@ -12,14 +12,19 @@ from django.contrib.auth.models import User
 def index(request):
     user = request.user
     userProfile = UserProfileModel.objects.get(user = user)
+    otherUserProfiles = UserProfileModel.objects.exclude(user = request.user)
 
-    similarUsers = [] 
+    similarUsers = []
+    
 
     context = {
         'loggedInUser' : user,
-        'userProfile' : userProfile 
+        'userProfile' : userProfile,
+        'oUP' : otherUserProfiles
     }
     return render(request, 'FriendZoneApp/index.html', context)
+
+
 
 @csrf_exempt #need to get rid of this !!!
 def register(request):
@@ -84,7 +89,6 @@ def profile_view(request):
 
     #sortedUsers = function // function to sort list of users, ordering by number of similar hobbies as loggedin user
 
-<<<<<<< HEAD
 #def index(request):
 #    loggedInUser = UserProfileModel.objects.get(id = request.user.id) // get the user that is logged in
 #    loggedInUsersHobbies = loggedInUser.hobby // get logged in users all hobbies // .hobby is from class UserProfileModel
@@ -105,9 +109,7 @@ def profile_view(request):
 #        'members' : sortedUsers // users will be displayed in the order in the index.html
 #    }
 #    return render(request, 'FriendZoneApp/index.html', context)
-=======
     #context = {
      #   'members' : sortedUsers, // users will be displayed in the order in the index.html
     #}
     #return render(request, 'FriendZoneApp/index.html', context)
->>>>>>> 478fa7b1c91cba57a666e447e6b22a774c8c6c49

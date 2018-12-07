@@ -39,13 +39,15 @@
 
         <br/> Next Shit
         <br>
-        {{ loggedInUser }} <br/>
+        User: {{ loggedInUser }} <br/>
+        Hobbies: <br/>
         {% for h in userProfile.hobby.all %} 
             {{ h.hobby }}
         {% endfor %} <br/>
         
-        {% for oU in otherUsers %}
-            {{ oU. }}
+        Other Users: <br/>
+        {% for oup in oUP %}
+           <p>GHANA  {{ oup }} </p>
         {% endfor %}      
         
 
