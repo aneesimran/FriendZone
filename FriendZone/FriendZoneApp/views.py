@@ -7,19 +7,60 @@ from django.template import loader
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 
-# Create your views here.
+sortedSimUsers = []
+mostSimilar = ""
+highest = 0
+
+
 
 def index(request):
     user = request.user
     userProfile = UserProfileModel.objects.get(user = user)
+    userHobbies = userProfile.hobby
     otherUserProfiles = UserProfileModel.objects.exclude(user = request.user)
-
     similarUsers = []
     
+    for a in otherUserProfiles:
+        theirHobbies = a.hobby
+        for aH in theirHobbies.all():
+            for uH in userHobbies.all():
+                if aH==uH:
+                    similarUsers.append(a)
+
+    def sortUsers(copySimUsers, userHobbies):
+        global highest
+        global mostSimilar
+        index = 0;
+        for copysimuser in copySimUsers:
+            for copysimuserhobby in copysimuser.hobby.all():
+                counter = 0
+                for userhobby in userHobbies.all():
+                    if copysimuserhobby == userhobby:
+                        counter = counter + 1
+
+            if counter > highest:
+                highest = counter
+                mostSimilar = copysimuser
+        sortedSimUsers.append(mostSimilar)
+        try: 
+            copySimUsers.remove(mostSimilar)
+        except: 
+            print("Error")
+        return copySimUsers
+
+    copySimUsers = similarUsers[:]
+    mostSimilar = copySimUsers[0]
+    for userss in copySimUsers:
+        copySimUsers = sortUsers(copySimUsers, userHobbies)
+    
+    for z in sortedSimUsers:
+        print("HUUKEH")
+        print(z)
 
     context = {
         'loggedInUser' : user,
         'userProfile' : userProfile,
+        'similarUsers' : similarUsers,
         'oUP' : otherUserProfiles
     }
     return render(request, 'FriendZoneApp/index.html', context)

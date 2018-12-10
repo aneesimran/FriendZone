@@ -47,8 +47,13 @@
         
         Other Users: <br/>
         {% for oup in oUP %}
-           <p>GHANA  {{ oup }} </p>
+           <p>GHANA  {{ oup }}  {{ oup.hobby }}</p>
         {% endfor %}      
+        <br/>
+        Similar Users:
+        {% for su in similarUsers %}
+           <p> user: {{ su }} </p>
+        {% endfor %}  
         
 
 
