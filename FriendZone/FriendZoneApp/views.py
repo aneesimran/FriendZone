@@ -5,11 +5,15 @@ from django.contrib.auth import login, logout
 from FriendZoneApp.models import UserProfileModel, Hobby
 from django.template import loader
 from django.http import HttpResponse
+from django.urls import reverse
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
+from FriendZoneApp.forms import EditProfileForm
 
 sortedSimUsers = []
 mostSimilar = ""
 highest = 0
+
 
 
 
@@ -101,11 +105,45 @@ def logout_view(request):
         return redirect('/login/')
 
 def profile_view(request):
-    userProfile = UserProfileModel.objects.get(id = request.user.id)
+    userProfile = UserProfileModel.objects.get(user = request.user)
+    print(userProfile.gender)
     context = {
         'userProfile' : userProfile
     }
     return render(request, 'FriendZoneApp/profile.html', context)
+
+
+
+def editprofile_view(request):
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, instance = UserProfileModel.objects.get(user = request.user))
+
+        if form.is_valid():
+            form.save()
+            return redirect('/profile/')
+
+    else:
+        form = EditProfileForm(instance = UserProfileModel.objects.get(user = request.user))
+        args = {'form': form}
+        return render(request, 'FriendZoneApp/editprofile.html', args)
+
+def forgotpassword_view(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data = request.POST, user = request.user)
+
+        if form.is_valid():
+            form.save()
+            
+            return redirect('/login/')
+        else:
+            return redirect('/password/')
+    else:
+        form = PasswordChangeForm(user = request.user)
+
+        args = {'form': form}
+        return render(request, 'FriendZoneApp/password.html', args)
+
+    
 
 
 

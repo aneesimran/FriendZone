@@ -22,7 +22,7 @@
         <br>
     {% endif %}
 
-        GHANA
+
         <table border="solid">
         {% for member in members %}
             <tr>
@@ -37,24 +37,6 @@
         {% endfor %}
         </table>
 
-        <br/> Next Shit
-        <br>
-        User: {{ loggedInUser }} <br/>
-        Hobbies: <br/>
-        {% for h in userProfile.hobby.all %} 
-            {{ h.hobby }}
-        {% endfor %} <br/>
-        
-        Other Users: <br/>
-        {% for oup in oUP %}
-           <p>GHANA  {{ oup }}  {{ oup.hobby }}</p>
-        {% endfor %}      
-        <br/>
-        Similar Users:
-        {% for su in similarUsers %}
-           <p> user: {{ su }} </p>
-        {% endfor %}  
-        
-
+               
 
 {% endblock %}
