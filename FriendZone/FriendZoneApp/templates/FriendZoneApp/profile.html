@@ -4,10 +4,12 @@
 
 <img src="{{ userProfile.image.url }}" width = "200">
 
-<p>username: {{ user }}</p>
-<p>gender: {{ userProfile.gender }}</p>
-<p>age: {{ userProfile.age }}</p>
-<p>email: {{ userProfile.email }}</p>
+<p>Username: {{ user }}</p>
+<p>First Name: {{ userProfile.first_name }}</p>
+<p>Last Name: {{ userProfile.last_name }}</p>
+<p>Gender: {{ userProfile.gender }}</p>
+<p>Age: {{ userProfile.age }}</p>
+<p>Email: {{ userProfile.email }}</p>
 
 {% for h in userProfile.hobby.all %}
     <p>{{ h.hobby }}</p>

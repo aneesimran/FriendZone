@@ -20,33 +20,33 @@
             <img src = "{% static 'logo.png' %}" height = 100>
         </div>
 
-        <p id="title">FriendZone {{ pageTitle }}  </p>     
+        <p id="title">FriendZone {{ pageTitle }}  </p>
 
-        <nav id='navlinks'> 
-            <a href="">Link 1 </a> &nbsp; 
+        <nav id='navlinks'>
+            <a href="">Link 1 </a> &nbsp;
             {% if user.is_authenticated %}
             {% else %}
-                <a href="/register/">Sign Up </a> &nbsp; 
+                <a href="/register/">Sign Up </a> &nbsp;
             {% endif %}
-            <a href="">Link 3 </a> 
-            
-            <form class='logout-link' action="/logout/" method='POST'> 
+            <a href="">Link 3 </a>
+
+            <form class='logout-link' action="/logout/" method='POST'>
                 {% csrf_token %}
                 {% if user.is_authenticated %}
                     <button type="submit" class="logoutButton"> Log out Now Bitch </button>
                 {% endif %}
-            </form> 
-        </nav>     
+            </form>
+        </nav>
     </div>
 
     {% if user.is_authenticated %}
-        <p>Welcome !!!</p>   
+        <p>Welcome !!!</p>
     {% else %}
-        <p>log in biatch</p>    
+        <p>log in biatch</p>
     {% endif %}
 
     {% block content %}
     {% endblock %}
-    
+
     </body>
 </html>
