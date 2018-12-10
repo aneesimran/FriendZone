@@ -14,14 +14,51 @@ from FriendZoneApp.forms import EditProfileForm, RegisterProfileForm
 def index(request):
     user = request.user
     userProfile = UserProfileModel.objects.get(user = user)
+    userHobbies = userProfile.hobby
     otherUserProfiles = UserProfileModel.objects.exclude(user = request.user)
-
     similarUsers = []
-    
+
+    for a in otherUserProfiles:
+        theirHobbies = a.hobby
+        for aH in theirHobbies.all():
+            for uH in userHobbies.all():
+                if aH==uH:
+                    similarUsers.append(a)
+
+    def sortUsers(copySimUsers, userHobbies):
+        global highest
+        global mostSimilar
+        index = 0;
+        for copysimuser in copySimUsers:
+            for copysimuserhobby in copysimuser.hobby.all():
+                counter = 0
+                for userhobby in userHobbies.all():
+                    if copysimuserhobby == userhobby:
+                        counter = counter + 1
+
+            if counter > highest:
+                highest = counter
+                mostSimilar = copysimuser
+        sortedSimUsers.append(mostSimilar)
+        try:
+            copySimUsers.remove(mostSimilar)
+        except:
+            print("Error")
+        return copySimUsers
+
+    copySimUsers = similarUsers[:]
+    mostSimilar = copySimUsers[0]
+    for userss in copySimUsers:
+        copySimUsers = sortUsers(copySimUsers, userHobbies)
+
+    for z in sortedSimUsers:
+        print("HUUKEH")
+        print(z)
 
     context = {
         'loggedInUser' : user,
         'userProfile' : userProfile,
+        'similarUsers' : similarUsers,
         'oUP' : otherUserProfiles
     }
     return render(request, 'FriendZoneApp/index.html', context)
@@ -38,7 +75,7 @@ def register(request):
             login(request, user)
             #log user in !
             return redirect('/index/')
-    else: 
+    else:
         form = RegisterProfileForm()
     return render (request, 'FriendZoneApp/register.html', {'form': form,'pageTitle': '- Register'})
 
@@ -46,12 +83,12 @@ def register(request):
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
-        if form.is_valid(): 
-            #log the user in 
+        if form.is_valid():
+            #log the user in
             user = form.get_user()
             login(request, user)
             return redirect('/index/')
-    else: 
+    else:
         form = AuthenticationForm()
     return render (request, 'FriendZoneApp/login.html', {'form': form, 'pageTitle': '- Login'})
 
@@ -63,7 +100,7 @@ def logout_view(request):
 
 def profile_view(request):
     userProfile = UserProfileModel.objects.get(user = request.user)
-    
+
     context = {
         'userProfile' : userProfile
     }
@@ -88,7 +125,7 @@ def forgotpassword_view(request):
 
         if form.is_valid():
             form.save()
-            
+
             return redirect('/login/')
         else:
             return redirect('/password/')
@@ -98,7 +135,7 @@ def forgotpassword_view(request):
         args = {'form': form}
         return render(request, 'FriendZoneApp/password.html', args)
 
-    
+
 
 
 
@@ -118,7 +155,7 @@ def forgotpassword_view(request):
       #  for h in otherUser.hobby:
        #     if otherUser.hobby in loggedInUserHobbies:
         #        counter++ // increment each time a user with same hobby is found, but reset counter when new user is checked
-            
+
         #similarUsers.append(otherUser) // user has same Hobby(ies) as logged in user so we add it to the list
 
     #sortedUsers = function // function to sort list of users, ordering by number of similar hobbies as loggedin user
@@ -127,7 +164,7 @@ def forgotpassword_view(request):
 #    loggedInUser = UserProfileModel.objects.get(id = request.user.id) // get the user that is logged in
 #    loggedInUsersHobbies = loggedInUser.hobby // get logged in users all hobbies // .hobby is from class UserProfileModel
 #    otherUsers = UserProfileModel.objects.exclude(id=request.user.id) // get all users except the logged in one
-#    
+#
 #    similarUsers = []  // create empty array
 
 #    for otherUser in otherUsers:
