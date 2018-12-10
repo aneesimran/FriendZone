@@ -6,11 +6,25 @@ from.import models
 class EditProfileForm(UserChangeForm):
     class Meta:
         model = models.UserProfileModel
-        fields = {
+        fields = [
             'email',
             'first_name',
             'last_name',
             'gender',
             'image',
             'hobby'
-        }
+        ]
+
+class RegisterProfileForm(UserChangeForm):
+    email = forms.EmailField(required = True)
+
+    class Meta:
+        model = models.UserProfileModel
+        fields = [
+            'user',
+            'email',
+            'first_name',
+            'last_name',
+            'gender',
+            'dob'
+        ]
