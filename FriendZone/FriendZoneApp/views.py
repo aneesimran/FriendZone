@@ -7,7 +7,8 @@ from django.template import loader
 from django.http import HttpResponse
 from django.urls import reverse
 from django.contrib.auth.models import User
-from FriendZoneApp.forms import EditProfileForm, RegisterProfileForm
+from FriendZoneApp.forms import EditProfileForm
+
 # Create your views here.
 
 
@@ -17,7 +18,7 @@ def index(request):
     userHobbies = userProfile.hobby
     otherUserProfiles = UserProfileModel.objects.exclude(user = request.user)
     similarUsers = []
-
+    
     for a in otherUserProfiles:
         theirHobbies = a.hobby
         for aH in theirHobbies.all():
@@ -25,70 +26,45 @@ def index(request):
                 if aH==uH:
                     similarUsers.append(a)
 
-    def sortUsers(copySimUsers, userHobbies):
-        global highest
-        global mostSimilar
-        index = 0;
-        for copysimuser in copySimUsers:
-            for copysimuserhobby in copysimuser.hobby.all():
-                counter = 0
-                for userhobby in userHobbies.all():
-                    if copysimuserhobby == userhobby:
-                        counter = counter + 1
-
-            if counter > highest:
-                highest = counter
-                mostSimilar = copysimuser
-        sortedSimUsers.append(mostSimilar)
-        try:
-            copySimUsers.remove(mostSimilar)
-        except:
-            print("Error")
-        return copySimUsers
-
     copySimUsers = similarUsers[:]
-    mostSimilar = copySimUsers[0]
-    for userss in copySimUsers:
-        copySimUsers = sortUsers(copySimUsers, userHobbies)
+    userFriends = userProfile.friend
 
-    for z in sortedSimUsers:
-        print("HUUKEH")
-        print(z)
 
     context = {
         'loggedInUser' : user,
         'userProfile' : userProfile,
         'similarUsers' : similarUsers,
-        'oUP' : otherUserProfiles
+        'oUP' : otherUserProfiles,
+        'userFriends' : userFriends 
     }
     return render(request, 'FriendZoneApp/index.html', context)
 
 
-
-@csrf_exempt #need to get rid of this !!!
+@csrf_exempt 
 def register(request):
     if request.method == 'POST':
-        form = RegisterProfileForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             UserProfileModel.objects.create(user = user)
             login(request, user)
             #log user in !
             return redirect('/index/')
-    else:
-        form = RegisterProfileForm()
+    else: 
+        form = UserCreationForm()
     return render (request, 'FriendZoneApp/register.html', {'form': form,'pageTitle': '- Register'})
+
 
 @csrf_exempt
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            #log the user in
+        if form.is_valid(): 
+            #log the user in 
             user = form.get_user()
             login(request, user)
             return redirect('/index/')
-    else:
+    else: 
         form = AuthenticationForm()
     return render (request, 'FriendZoneApp/login.html', {'form': form, 'pageTitle': '- Login'})
 
@@ -98,13 +74,26 @@ def logout_view(request):
         logout(request)
         return redirect('/login/')
 
-def profile_view(request):
-    userProfile = UserProfileModel.objects.get(user = request.user)
-
+def profile_view(request, userProfileID):
+    userProfile = UserProfileModel.objects.get(id = userProfileID)
+    
     context = {
         'userProfile' : userProfile
     }
     return render(request, 'FriendZoneApp/profile.html', context)
+
+def addFriend(request, userProfileID, newFriendID):
+    userProfile = UserProfileModel.objects.get(id = userProfileID)
+    newFriendProfile = UserProfileModel.objects.get(id = newFriendID)
+    userProfile.friend.add(newFriendProfile)
+    return index(request)
+
+def addHobby(request, userProfileID, hobb):
+    userProfile = UserProfileModel.objects.get(id = userProfileID)
+    hobby = Hobby.objects.get(hobby=hobb)
+    userProfile.hobby.add(hobby)
+    userProfile.save()
+    return index(request)
 
 def editprofile_view(request):
     if request.method == 'POST':
@@ -125,7 +114,7 @@ def forgotpassword_view(request):
 
         if form.is_valid():
             form.save()
-
+            
             return redirect('/login/')
         else:
             return redirect('/password/')
@@ -135,7 +124,7 @@ def forgotpassword_view(request):
         args = {'form': form}
         return render(request, 'FriendZoneApp/password.html', args)
 
-
+    
 
 
 
@@ -155,7 +144,7 @@ def forgotpassword_view(request):
       #  for h in otherUser.hobby:
        #     if otherUser.hobby in loggedInUserHobbies:
         #        counter++ // increment each time a user with same hobby is found, but reset counter when new user is checked
-
+            
         #similarUsers.append(otherUser) // user has same Hobby(ies) as logged in user so we add it to the list
 
     #sortedUsers = function // function to sort list of users, ordering by number of similar hobbies as loggedin user
@@ -164,7 +153,7 @@ def forgotpassword_view(request):
 #    loggedInUser = UserProfileModel.objects.get(id = request.user.id) // get the user that is logged in
 #    loggedInUsersHobbies = loggedInUser.hobby // get logged in users all hobbies // .hobby is from class UserProfileModel
 #    otherUsers = UserProfileModel.objects.exclude(id=request.user.id) // get all users except the logged in one
-#
+#    
 #    similarUsers = []  // create empty array
 
 #    for otherUser in otherUsers:

@@ -23,19 +23,38 @@
     {% endif %}
 
 
+        Logged in Users Profile ID: {{ userProfile.id }}
+        <a href="/profile/{{ userProfile.id }}"> My Profile </a> 
+        My Hobbies: 
+        {% for userHobs in userProfile.hobby.all %}
+        <p> {{ userHobs.hobby }} </p>
+        {% endfor %}
+
+        <br/> 
+
+        <div class = "main">
+        Find friends with similar hobbies !
         <table border="solid">
-        {% for member in members %}
+        {% for member in similarUsers %}
             <tr>
-                <td>Member: {{ member }}</td>
-                <td>Hobbies: 
+                <td> <a href="/profile/{{ member.id }}"> {{ member }} </a> then {{ member.id }} </td>
+                <td><b>Hobbies: </b><br/>
                     {% for h in member.hobby.all %} 
-                        {{ h.hobby }}
+                        {{ h.hobby }} <br/>
                     {% endfor %}
                 </td>
-                <td>Add Friend</td>
+                <td> <a href= "/addFriend/{{ userProfile.id }}/{{ member.id }}" > <button> Add Friend </button> </a> </td>
             </tr>
         {% endfor %}
         </table>
+        </div>
+
+        <br/>
+        friends <br/>
+
+        {% for friends in userFriends.all %}
+        <p> {{ friends }} made at whenever </p>
+        {% endfor %}
 
                
 
