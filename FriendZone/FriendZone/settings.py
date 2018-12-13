@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'password_reset',
     'django.contrib.staticfiles',
 ]
 
@@ -125,3 +126,9 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+EMAIL_HOST = 'smtp.server.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'friendzone720@gmail.com'
+EMAIL_HOST_PASSWORD = 'Tahmeed123'
+EMAIL_USE_TLS = True

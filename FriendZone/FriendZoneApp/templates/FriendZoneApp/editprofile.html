@@ -1,11 +1,26 @@
 {% extends "FriendZoneApp/header.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+<body>
 
-<form method = "POST">
+  <div class = "container">
+    <div class = "col-xs-6 col-xs-offset-3">
+
+    <div class="panel panel-default"
+    <div class="panel-heading">
+    <div class = "panel-body">
+<form method = "POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form|crispy }}
-    <button type = "submit">Submit</button>
+
+    <center><button class = "btn btn-default" value = "submit">Submit</button></center>
 </form>
+    </div>
+    </div>
+    </div>
+
+
 
 {% endblock %}
+</div>
+</body>

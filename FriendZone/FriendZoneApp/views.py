@@ -4,13 +4,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import login, logout
 from FriendZoneApp.models import UserProfileModel, Hobby
 from django.template import loader
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from django.contrib.auth.models import User
-from FriendZoneApp.forms import EditProfileForm
+from FriendZoneApp.forms import EditProfileForm, RegisterForm
+from datetime import date
+from django.core import serializers
+from django.core.mail import send_mail
 
 # Create your views here.
-
 
 def index(request):
     user = request.user
@@ -40,6 +42,63 @@ def index(request):
     return render(request, 'FriendZoneApp/index.html', context)
 
 
+
+def filterUsers(request):
+    print("GHANA filerUsers accedded GHANA")
+    gender = request.GET['gender']
+    ageFilter = request.GET['chosenAge']
+
+    user = request.user
+    userProfile = UserProfileModel.objects.get(user = user)
+    print(userProfile.hobby.all)
+    userHobbies = userProfile.hobby
+    otherUserProfiles = UserProfileModel.objects.exclude(user = request.user)
+    similarUsers = []
+    userDict = dict()
+
+    for a in otherUserProfiles:
+        if a.gender==gender or gender=="test":
+            theirHobbies = a.hobby
+            for aH in theirHobbies.all():
+                for uH in userHobbies.all():
+                    if aH==uH:
+                        if ageFilter == "":
+                            similarUsers.append(a)    
+                        else:
+                            if ageFilter=="lessThan10":
+                                if a.age < 10:
+                                    similarUsers.append(a)
+                                    print("This user age in lessThan10")
+                                    print(a.age)
+                            elif ageFilter=="11-20":
+                                if a.age > 10 and a.age < 21:
+                                    similarUsers.append(a)
+                                    print("This user age in 11-20")
+                                    print(a.age)
+                            elif ageFilter=="21-30":
+                                if a.age > 20 and a.age < 31:
+                                    similarUsers.append(a)
+                                    print("This user age in 21-30")
+                                    print(a.age)
+                            elif ageFilter=="31-40":
+                                if a.age > 30 and a.age < 41:
+                                    similarUsers.append(a)
+                                    print("This user age in 31-40")
+                                    print(a.age)
+                            elif ageFilter=="moreThan41":
+                                if a.age > 40:
+                                    similarUsers.append(a)
+                                    print("this user age in moreThan41")
+                                    print(a.age)
+
+    allProfiles = serializers.serialize("json", similarUsers)
+    print("Selected Gender is: ")
+    print(gender)
+    print(similarUsers)
+    print(".")
+    print(allProfiles)
+    return JsonResponse(allProfiles, safe=False)
+
 @csrf_exempt 
 def register(request):
     if request.method == 'POST':
@@ -49,7 +108,7 @@ def register(request):
             UserProfileModel.objects.create(user = user)
             login(request, user)
             #log user in !
-            return redirect('/index/')
+            return redirect('/register2/')
     else: 
         form = UserCreationForm()
     return render (request, 'FriendZoneApp/register.html', {'form': form,'pageTitle': '- Register'})
@@ -95,18 +154,69 @@ def addHobby(request, userProfileID, hobb):
     userProfile.save()
     return index(request)
 
+
 def editprofile_view(request):
     if request.method == 'POST':
         form = EditProfileForm(request.POST, instance = UserProfileModel.objects.get(user = request.user))
-
         if form.is_valid():
-            form.save()
-            return redirect('/profile/')
+            updated_profile = form.save()
+            print(request.FILES)
+            if 'image' in request.FILES:
+                updated_profile.image = request.FILES['image']
+            updated_profile.save()
+            member = UserProfileModel.objects.get(user = request.user)
+            dob = member.dob
+            dobYear = member.dob.year
+            dobMonth = member.dob.month
+            dobDay = member.dob.day
+            today = date.today()
+            ageAns = today.year - dobYear - ((today.month, today.day) < (dobMonth, dobDay))
+            member.age = ageAns
+            member.save()
+            return redirect('/index/')
 
     else:
         form = EditProfileForm(instance = UserProfileModel.objects.get(user = request.user))
         args = {'form': form}
         return render(request, 'FriendZoneApp/editprofile.html', args)
+
+
+def register2(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST, instance = UserProfileModel.objects.get(user = request.user))
+        if form.is_valid():
+            updated_profile = form.save()
+            if 'image' in request.FILES:
+                updated_profile.image = request.FILES['image']
+            updated_profile.save()
+            member = UserProfileModel.objects.get(user = request.user)
+            dob = member.dob
+            dobYear = member.dob.year
+            dobMonth = member.dob.month
+            dobDay = member.dob.day
+            today = date.today()
+            ageAns = today.year - dobYear - ((today.month, today.day) < (dobMonth, dobDay))
+            member.age = ageAns
+            member.save()
+            print(dob)
+            return redirect('/index/')
+
+    else:
+        form = RegisterForm(instance = UserProfileModel.objects.get(user = request.user))
+        args = {'form': form}
+        return render(request, 'FriendZoneApp/editprofile.html', args)
+
+def likes(user, request):
+    likes = UserProfileModel.likes.all()
+    members = UserProfileModel.objects.all()
+    userMember = UserProfileModel.objects.get(user = request.user)
+    context = {
+        'userMember' : userMember,
+        'members' : members,
+        'likes': likes
+    }
+    return render(request, 'FriendZoneApp/profile.html', context)
+
 
 def forgotpassword_view(request):
     if request.method == 'POST':
@@ -123,6 +233,18 @@ def forgotpassword_view(request):
 
         args = {'form': form}
         return render(request, 'FriendZoneApp/password.html', args)
+
+def listFriends(request, userProfileID):
+    user = request.user
+    userProfile = UserProfileModel.objects.get(user = user)
+    userFriends = userProfile.friend
+    context = {
+        'loggedInUser' : user,
+        'userProfile' : userProfile,
+        'userFriends' : userFriends 
+    }
+    return render(request, 'FriendZoneApp/friends.html', context)
+
 
     
 

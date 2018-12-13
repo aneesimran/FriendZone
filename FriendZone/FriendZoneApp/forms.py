@@ -15,3 +15,15 @@ class EditProfileForm(UserChangeForm):
             'hobby'
         ]
 
+class RegisterForm(UserChangeForm):
+    class Meta:
+        model = UserProfileModel
+        fields = [
+            'email',
+            'first_name',
+            'last_name',
+            'gender',
+            'image',
+            'hobby',
+            'dob'
+        ]

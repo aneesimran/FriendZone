@@ -22,7 +22,7 @@
         <br>
     {% endif %}
 
-
+        ghanaaaaa
         Logged in Users Profile ID: {{ userProfile.id }}
         <a href="/profile/{{ userProfile.id }}"> My Profile </a> 
         My Hobbies: 
@@ -34,7 +34,7 @@
 
         <div class = "main">
         Find friends with similar hobbies !
-        <table border="solid">
+        <table id='table' border="solid">
         {% for member in similarUsers %}
             <tr>
                 <td> <a href="/profile/{{ member.id }}"> {{ member }} </a> then {{ member.id }} </td>
@@ -55,6 +55,88 @@
         {% for friends in userFriends.all %}
         <p> {{ friends }} made at whenever </p>
         {% endfor %}
+
+
+        <br/>
+        Filter Gender: 
+        <input type='radio' id='maleFilter' name='genderFilter' value='F'> Female
+        <input type='radio' id='femaleFilter' name='genderFilter' value='M'> Male
+        
+        <br/>
+        Filter Age: 
+        <input type='radio' id='lessThan10' name='ageFilter' value='lessThan10'> &lt; 10
+        <input type='radio' id='11-20' name='ageFilter' value='11-20'> 11-20
+        <input type='radio' id='21-30' name='ageFilter' value='21-30'> 21-30
+        <input type='radio' id='31-40' name='ageFilter' value='31-40'> 31-40
+        <input type='radio' id='moreThan41' name='ageFilter' value='moreThan41'> &gt; 41
+        <br/>
+        <button id='filterButton'>Filter</button>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
+<script>
+$('#filterButton').click(function(e){
+    console.log("ghana jdfjfdjfndfdfd");
+            var chosenAge = "";
+            if ($('input[name=ageFilter]:checked').length>0 ){
+                if ($('#lessThan10')[0].checked ){
+                    chosenAge = $('#lessThan10')[0].value
+                    console.log("Chosen Age: "+ chosenAge)
+                }
+                else if ($('#11-20')[0].checked ){
+                    chosenAge = $('#11-20')[0].value
+                    console.log("Chosen Age: "+ chosenAge)
+                }
+                else if ($('#21-30')[0].checked ){
+                    chosenAge = $('#21-30')[0].value
+                    console.log("Chosen Age: "+ chosenAge)
+                }
+                else if ($('#31-40')[0].checked ){
+                    chosenAge = $('#31-40')[0].value
+                    console.log("Chosen Age: "+ chosenAge)
+                }
+                else if ($('#moreThan41')[0].checked ){
+                    chosenAge = $('#moreThan41')[0].value
+                    console.log("Chosen Age: "+ chosenAge)
+                }
+            }
+            else {
+                console.log("IT WAS NOT CHECKED CUZ");
+            }
+            
+            var chosenOption = "test";
+            if ($("#maleFilter")[0].checked ){
+                chosenOption = $("#maleFilter")[0].value;
+            }
+            else if ($("#femaleFilter")[0].checked ) {
+                chosenOption = $("#femaleFilter")[0].value;
+            } 
+            $.ajax({
+                type: 'GET',
+                url: '/filterUsers',
+                data: {
+                        gender : chosenOption,
+                        chosenAge : chosenAge
+                },
+                success: function(data){
+                    console.log(data);
+                    var tbl = document.getElementById('table'); 
+                    //if(tbl) tbl.parentNode.removeChild(tbl);
+                    var obj = JSON.parse(data);
+                    console.log(obj);
+
+
+                    $('#table tr').remove();
+                    /*for (var i=0; i<2; i++){
+                        console.log("entered for loop")
+                        $('#table').append("<tr><td> + " +  obj[i].first_name + " " + obj[i].last_name +  " </td> <td> " + obj[i].fields.hobby + "</td> <td> Add Friend" + obj[i].fields.age + " </td> </tr>");
+                    }*/
+                },
+                //error: function(request,msg,error) {
+                    //alert('Saink in updating (PUT) went wrong!');
+                //}
+            })
+        });
+</script>
 
                
 

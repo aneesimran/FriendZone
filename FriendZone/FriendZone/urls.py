@@ -6,7 +6,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('FriendZoneApp.urls'))
+    path('', include('FriendZoneApp.urls')),
+    path('FriendZoneApp/', include('password_reset.urls'))
 ] 
 
 if settings.DEBUG:

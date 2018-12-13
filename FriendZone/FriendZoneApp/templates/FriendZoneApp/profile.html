@@ -1,14 +1,36 @@
 {% extends "FriendZoneApp/header.html" %}
 {% block content %}
 
+{% if userProfile %}
+    {% if userProfile.image %}
+        <img src="{{ userProfile.image.url }}" width = "200">
+    {% else %}
+        <img src = "/media/default.jpg" width = "200">
+    {% endif %}
+{% else %}
+    test
+{% endif %}
 
-<img src="{{ userProfile.image.url }}" width = "200">
 
 <p>Username: {{ user }}</p>
 <p>First Name: {{ userProfile.first_name }}</p>
 <p>Last Name: {{ userProfile.last_name }}</p>
 <p>Gender: {{ userProfile.gender }}</p>
-<p>Age: {{ userProfile.age }}</p>
+<p> age from model: {{ userProfile.age }}
+<p>Age:  
+   <script>
+        var year = "{{ userProfile.dob.year }}";
+        var month = "{{ userProfile.dob.month }}";
+        var day = "{{ userProfile.dob.day }}";
+        var today = new Date();
+        var age = today.getFullYear() - year;
+        if (today.getMonth() < month || (today.getMonth() == month && today.getDate() < day)) 
+        {
+            age--;
+        }
+        document.write(age);
+   </script>
+</p>
 <p>Email: {{ userProfile.email }}</p>
 
 {% for h in userProfile.hobby.all %}

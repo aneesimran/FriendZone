@@ -1,0 +1,11 @@
+{% extends "FriendZoneApp/header.html" %}
+
+{% block content %}
+    <h1>My Friends</h1> 
+    List:
+    {% for friends in userFriends.all %}
+        <p> <a href="/profile/{{ userProfile.id }}"> {{ friends }}  </a> </p>
+    {% endfor %}
+
+
+{% endblock %}
