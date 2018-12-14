@@ -16,5 +16,6 @@ urlpatterns = [
     path('addFriend/<int:userProfileID>/<int:newFriendID>/', views.addFriend, name='addFriend'),
     path('addHobby/<int:userProfileID>/<hobb>', views.addHobby, name='addHobby'),
     path('filterUsers/', views.filterUsers, name='filterUsers'),
-    path('friends/<int:userProfileID>', views.listFriends, name='listFriends')
+    path('friends/<int:userProfileID>', views.listFriends, name='listFriends'),
+    path('likes/', views.likes_view, name='likesView')
 ]

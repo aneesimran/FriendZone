@@ -1,0 +1,15 @@
+{% extends "FriendZoneApp/header.html" %}
+
+{% block content %}
+    
+    Logged in Users Profile ID: {{ userMember.id }}
+
+    likes: {{ userLikes }}
+
+    <h2>All users:</h2>
+    {% for member in userLikes %}
+        <p>{{ member }}</p>
+    {% endfor %}
+
+
+{% endblock %}

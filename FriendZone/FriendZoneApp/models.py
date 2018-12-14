@@ -3,13 +3,22 @@ from django.contrib.auth.models import User
 from datetime import datetime
 
 # Create your models here.
+class HobbyManager(models.Manager):
+    def get_by_natural_key(self, hobby):
+        return self.get(hobby=hobby)
+
 class Hobby(models.Model):
+    objects = HobbyManager()
+
     hobby = models.CharField(max_length= 20, choices = (('Gaming', 'Gaming'), ('Sports', 'Sports'), 
     ('Reading', 'Reading'), ('Hiking', 'Hiking'), ('Cycling', 'Cycling'), ('Photography', 'Photography'), 
     ('Modelling', 'Modelling')), blank = True)
 
     def _str_(self):
         return self.hobby
+
+    def natural_key(self):
+        return (self.hobby)
 
 class UserProfileModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -27,7 +36,7 @@ class UserProfileModel(models.Model):
     
     @property
     def likes_count(self):
-        return self.following.count()
+        return self.likes.count()
     
     
     def __str__(self):

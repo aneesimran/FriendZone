@@ -145,6 +145,7 @@ def addFriend(request, userProfileID, newFriendID):
     userProfile = UserProfileModel.objects.get(id = userProfileID)
     newFriendProfile = UserProfileModel.objects.get(id = newFriendID)
     userProfile.friend.add(newFriendProfile)
+    send_mail('you have a new freind', 'someone added you as a friend', 'friendzone720@gmail.com', recipient_list=[newFriendProfile.email])
     return index(request)
 
 def addHobby(request, userProfileID, hobb):
@@ -160,7 +161,6 @@ def editprofile_view(request):
         form = EditProfileForm(request.POST, instance = UserProfileModel.objects.get(user = request.user))
         if form.is_valid():
             updated_profile = form.save()
-            print(request.FILES)
             if 'image' in request.FILES:
                 updated_profile.image = request.FILES['image']
             updated_profile.save()
@@ -206,16 +206,16 @@ def register2(request):
         args = {'form': form}
         return render(request, 'FriendZoneApp/editprofile.html', args)
 
-def likes(user, request):
-    likes = UserProfileModel.likes.all()
+def likes_view(request):
+    userLikes = UserProfileModel.likes.all()
     members = UserProfileModel.objects.all()
     userMember = UserProfileModel.objects.get(user = request.user)
     context = {
         'userMember' : userMember,
         'members' : members,
-        'likes': likes
+        'userLikes' : userLikes
     }
-    return render(request, 'FriendZoneApp/profile.html', context)
+    return render(request, 'FriendZoneApp/likes.html', context)
 
 
 def forgotpassword_view(request):
