@@ -32,12 +32,6 @@ class UserProfileModel(models.Model):
     #email = models.EmailField(blank = True, unique = True)
     hobby = models.ManyToManyField(Hobby, blank = True)
     friend = models.ManyToManyField('self', blank = True)
-    likes = models.ManyToManyField(to='self', blank=True, symmetrical=False)
-    
-    @property
-    def likes_count(self):
-        return self.likes.count()
-    
     
     def __str__(self):
         return self.user.username

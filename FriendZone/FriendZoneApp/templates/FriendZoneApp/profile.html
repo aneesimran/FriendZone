@@ -8,31 +8,20 @@
         <img src = "/media/default.jpg" width = "200">
     {% endif %}
 {% else %}
-    test
+    Error 1628 : Profile Image Error
 {% endif %}
-
 
 <p>Username: {{ user }}</p>
 <p>First Name: {{ userProfile.first_name }}</p>
 <p>Last Name: {{ userProfile.last_name }}</p>
-<p>Gender: {{ userProfile.gender }}</p>
-<p> age from model: {{ userProfile.age }}
-<p>Age:  
-   <script>
-        var year = "{{ userProfile.dob.year }}";
-        var month = "{{ userProfile.dob.month }}";
-        var day = "{{ userProfile.dob.day }}";
-        var today = new Date();
-        var age = today.getFullYear() - year;
-        if (today.getMonth() < month || (today.getMonth() == month && today.getDate() < day)) 
-        {
-            age--;
-        }
-        document.write(age);
-   </script>
-</p>
+{% if userProfile.gender == 'M' %}
+    <p>Gender: Male<p>
+{% elif userProfile.gender == 'F' %}
+    <p>Gender: Female</p>
+{% endif %}
+<p>Age: {{ userProfile.age }}
 <p>Email: {{ userProfile.email }}</p>
-
+<h2>Hobbies:</h2>
 {% for h in userProfile.hobby.all %}
     <p>{{ h.hobby }}</p>
 {% endfor %}

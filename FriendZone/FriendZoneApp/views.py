@@ -114,7 +114,7 @@ def register(request):
     return render (request, 'FriendZoneApp/register.html', {'form': form,'pageTitle': '- Register'})
 
 
-@csrf_exempt
+
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
@@ -144,8 +144,9 @@ def profile_view(request, userProfileID):
 def addFriend(request, userProfileID, newFriendID):
     userProfile = UserProfileModel.objects.get(id = userProfileID)
     newFriendProfile = UserProfileModel.objects.get(id = newFriendID)
+    friendName = userProfile.user
     userProfile.friend.add(newFriendProfile)
-    send_mail('you have a new freind', 'someone added you as a friend', 'friendzone720@gmail.com', recipient_list=[newFriendProfile.email])
+    send_mail('You have a new friend - FriendZone', str(friendName) + ' added you as a friend', 'friendzone720@gmail.com', recipient_list=[newFriendProfile.email])
     return index(request)
 
 def addHobby(request, userProfileID, hobb):
@@ -164,15 +165,6 @@ def editprofile_view(request):
             if 'image' in request.FILES:
                 updated_profile.image = request.FILES['image']
             updated_profile.save()
-            member = UserProfileModel.objects.get(user = request.user)
-            dob = member.dob
-            dobYear = member.dob.year
-            dobMonth = member.dob.month
-            dobDay = member.dob.day
-            today = date.today()
-            ageAns = today.year - dobYear - ((today.month, today.day) < (dobMonth, dobDay))
-            member.age = ageAns
-            member.save()
             return redirect('/index/')
 
     else:
@@ -205,18 +197,6 @@ def register2(request):
         form = RegisterForm(instance = UserProfileModel.objects.get(user = request.user))
         args = {'form': form}
         return render(request, 'FriendZoneApp/editprofile.html', args)
-
-def likes_view(request):
-    userLikes = UserProfileModel.likes.all()
-    members = UserProfileModel.objects.all()
-    userMember = UserProfileModel.objects.get(user = request.user)
-    context = {
-        'userMember' : userMember,
-        'members' : members,
-        'userLikes' : userLikes
-    }
-    return render(request, 'FriendZoneApp/likes.html', context)
-
 
 def forgotpassword_view(request):
     if request.method == 'POST':
