@@ -11,6 +11,7 @@ from FriendZoneApp.forms import EditProfileForm, RegisterForm
 from datetime import date
 from django.core import serializers
 from django.core.mail import send_mail
+import operator
 
 # Create your views here.
 
@@ -26,18 +27,33 @@ def index(request):
         for aH in theirHobbies.all():
             for uH in userHobbies.all():
                 if aH==uH:
-                    similarUsers.append(a)
+                    similarUsers.append(a)    
 
+    sortedUsers = []
     copySimUsers = similarUsers[:]
-    userFriends = userProfile.friend
 
+    for sUser in copySimUsers: 
+        temp = {
+            0: sUser.id,
+            1: sUser.first_name, 
+            2: sUser.last_name, 
+            3: sUser.hobby.all(),
+            'count': sUser.hobby.all().count()
+        }
+        print(temp[2])
+        sortedUsers.append(temp)
+
+    print(sortedUsers)
+    sortedUsers.sort(key=operator.itemgetter('count'), reverse = True)
+    print("")
+    print(sortedUsers)
 
     context = {
         'loggedInUser' : user,
         'userProfile' : userProfile,
         'similarUsers' : similarUsers,
         'oUP' : otherUserProfiles,
-        'userFriends' : userFriends 
+        'sortedUsers': sortedUsers
     }
     return render(request, 'FriendZoneApp/index.html', context)
 
@@ -91,7 +107,8 @@ def filterUsers(request):
                                     print("this user age in moreThan41")
                                     print(a.age)
 
-    allProfiles = serializers.serialize("json", similarUsers)
+    allProfiles = serializers.serialize("json", similarUsers, indent = 2, use_natural_foreign_keys=True, 
+    use_natural_primary_keys=True)
     print("Selected Gender is: ")
     print(gender)
     print(similarUsers)

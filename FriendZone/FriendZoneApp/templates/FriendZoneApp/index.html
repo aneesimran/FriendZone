@@ -22,43 +22,34 @@
         <br>
     {% endif %}
 
-        ghanaaaaa
+        
         Logged in Users Profile ID: {{ userProfile.id }}
-        <a href="/profile/{{ userProfile.id }}"> My Profile </a> 
-        My Hobbies: 
-        {% for userHobs in userProfile.hobby.all %}
-        <p> {{ userHobs.hobby }} </p>
-        {% endfor %}
+        <a href="/profile/{{ userProfile.id }}"> My Profile </a>
 
         <br/> 
 
         <div class = "main">
         Find friends with similar hobbies !
         <table id='table' border="solid">
-        {% for member in similarUsers %}
+        {% for member in sortedUsers %}
             <tr>
-                <td> <a href="/profile/{{ member.id }}"> {{ member }} </a> then {{ member.id }} </td>
+                <td> <a href="/profile/{{ member.0 }}"> {{ member.1 }} {{ member.2 }}</a> </td>
                 <td><b>Hobbies: </b><br/>
-                    {% for h in member.hobby.all %} 
-                        {{ h.hobby }} <br/>
+                    {% for h in member.3 %} 
+                        {{ h }} <br/>
                     {% endfor %}
                 </td>
-                <td> <a href= "/addFriend/{{ userProfile.id }}/{{ member.id }}" > <button> Add Friend </button> </a> </td>
+                <td> <a href= "/addFriend/{{ userProfile.id }}/{{ member.0 }}" > <button> Add Friend </button> </a> </td>
             </tr>
         {% endfor %}
         </table>
         </div>
 
         <br/>
-        friends <br/>
-
-        {% for friends in userFriends.all %}
-        <p> {{ friends }} made at whenever </p>
-        {% endfor %}
 
 
         <br/>
-        Filter Gender: 
+Filter Gender: 
         <input type='radio' id='maleFilter' name='genderFilter' value='F'> Female
         <input type='radio' id='femaleFilter' name='genderFilter' value='M'> Male
         
@@ -71,11 +62,17 @@
         <input type='radio' id='moreThan41' name='ageFilter' value='moreThan41'> &gt; 41
         <br/>
         <button id='filterButton'>Filter</button>
+        <textarea id='userProfileIDLabelled'>{{ userProfile.id }}</textarea>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
 <script>
+
+$(document).ready(function(){
+    $("#userProfileIDLabelled").hide();
+});
+
+
 $('#filterButton').click(function(e){
-    console.log("ghana jdfjfdjfndfdfd");
             var chosenAge = "";
             if ($('input[name=ageFilter]:checked').length>0 ){
                 if ($('#lessThan10')[0].checked ){
@@ -110,6 +107,7 @@ $('#filterButton').click(function(e){
             else if ($("#femaleFilter")[0].checked ) {
                 chosenOption = $("#femaleFilter")[0].value;
             } 
+            var userID = $("#userProfileIDLabelled").val();
             $.ajax({
                 type: 'GET',
                 url: '/filterUsers',
@@ -126,10 +124,10 @@ $('#filterButton').click(function(e){
 
 
                     $('#table tr').remove();
-                    /*for (var i=0; i<2; i++){
-                        console.log("entered for loop")
-                        $('#table').append("<tr><td> + " +  obj[i].first_name + " " + obj[i].last_name +  " </td> <td> " + obj[i].fields.hobby + "</td> <td> Add Friend" + obj[i].fields.age + " </td> </tr>");
-                    }*/
+                    for (var i=0; i<2; i++){
+                        console.log(obj)
+                        $('#table').append("<tr><td> <a href='/profile/" + obj[i].pk + "'> "+ obj[i].fields.first_name + " " + obj[i].fields.last_name +"</a> </td> <td> " + obj[i].fields.hobby + "</td> <td> <a href='/addFriend/" + userID + "/" + obj[i].pk + "'> <button> Add Friend </button> </a>" + obj[i].fields.age + " </td> </tr>");
+                    }           //<td> <a href = "/profile/{{ member.0 }}"> {{ member.1 }} {{ member.2}} </a> </td>      
                 },
                 //error: function(request,msg,error) {
                     //alert('Saink in updating (PUT) went wrong!');
