@@ -1,0 +1,28 @@
+{% extends "FriendZoneApp/header.html" %}
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'registerStyle.css' %}"/>
+{% load crispy_forms_tags %}
+{% block content %}
+<body>
+
+  <div class = "container">
+    <div class = "col-xs-6 col-xs-offset-3">
+    <div class="panel panel-default"
+    <div class="panel-heading">Please input your information</div>
+    <div class = "panel-body">
+<form method = "POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+
+    <center><button class = "btn btn-default" value = "submit">Submit</button></center>
+</form>
+    </div>
+
+    </div>
+
+
+
+{% endblock %}
+</div>
+</body>

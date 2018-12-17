@@ -116,21 +116,23 @@ def filterUsers(request):
     print(allProfiles)
     return JsonResponse(allProfiles, safe=False)
 
-@csrf_exempt 
+#method allowing users to create an account
 def register(request):
     if request.method == 'POST':
+        #uses a post method from html template
         form = UserCreationForm(request.POST)
         if form.is_valid():
+            #if valid it will save the form 
             user = form.save()
+            #adds a new user in the model
             UserProfileModel.objects.create(user = user)
             login(request, user)
             #log user in !
+            #redirects to the 2nd register page
             return redirect('/register2/')
     else: 
         form = UserCreationForm()
     return render (request, 'FriendZoneApp/register.html', {'form': form,'pageTitle': '- Register'})
-
-
 
 def login_view(request):
     if request.method == 'POST':
@@ -173,11 +175,13 @@ def addHobby(request, userProfileID, hobb):
     userProfile.save()
     return index(request)
 
-
+#method that allows users to edit thier profiles.
 def editprofile_view(request):
     if request.method == 'POST':
+        #uses ac custom django form from forms.py
         form = EditProfileForm(request.POST, instance = UserProfileModel.objects.get(user = request.user))
         if form.is_valid():
+            #if valid it saves it and if it contains an image it will then save it in the model and direct to index
             updated_profile = form.save()
             if 'image' in request.FILES:
                 updated_profile.image = request.FILES['image']
@@ -189,23 +193,28 @@ def editprofile_view(request):
         args = {'form': form}
         return render(request, 'FriendZoneApp/editprofile.html', args)
 
-
+#this is the 2nd stage of user registration
 def register2(request):
     if request.method == 'POST':
+    #uses a custom django form which is called from forms.py
         form = RegisterForm(request.POST, instance = UserProfileModel.objects.get(user = request.user))
         if form.is_valid():
+            #if form is valid then it will save in updated_profile, and if the form contains an image, then it will save to the model database
             updated_profile = form.save()
             if 'image' in request.FILES:
                 updated_profile.image = request.FILES['image']
             updated_profile.save()
+            #gets the current user details and then calculates the age from the DOB stored in the model
             member = UserProfileModel.objects.get(user = request.user)
             dob = member.dob
             dobYear = member.dob.year
             dobMonth = member.dob.month
             dobDay = member.dob.day
+            #imports datetime to calculate current date
             today = date.today()
             ageAns = today.year - dobYear - ((today.month, today.day) < (dobMonth, dobDay))
             member.age = ageAns
+            #once the age is calculated it then passes it back to the model and stores in under age
             member.save()
             print(dob)
             return redirect('/index/')
@@ -215,19 +224,21 @@ def register2(request):
         args = {'form': form}
         return render(request, 'FriendZoneApp/editprofile.html', args)
 
+#method to allow user to change their passwords
 def forgotpassword_view(request):
     if request.method == 'POST':
+        #uses the django form Password change form
         form = PasswordChangeForm(data = request.POST, user = request.user)
 
         if form.is_valid():
             form.save()
-            
+            #if the form is valid it will save and redirect to login page, else direct to password page
             return redirect('/login/')
         else:
             return redirect('/password/')
     else:
         form = PasswordChangeForm(user = request.user)
-
+        #sends the form to the html template
         args = {'form': form}
         return render(request, 'FriendZoneApp/password.html', args)
 
@@ -242,6 +253,16 @@ def listFriends(request, userProfileID):
     }
     return render(request, 'FriendZoneApp/friends.html', context)
 
+def removeFriend(request, userProfileID, friendID):
+    user = request.user
+    userProfile = UserProfileModel.objects.get(user = user)
+    
+    newFriendProfile = UserProfileModel.objects.get(id = friendID)
+    friendName = userProfile.user
+    userProfile.friend.remove(newFriendProfile)
+    send_mail('You have lost a friend - FriendZone', str(friendName) + ' removed you as a friend, Inna lillahi wa inna ilayhi rajiun', 'friendzone720@gmail.com', recipient_list=[newFriendProfile.email])
+    return listFriends(request, userProfile.id)
+
 
     
 
@@ -249,46 +270,3 @@ def listFriends(request, userProfileID):
 
 
 
-
-
-#def index(request):
- #   loggedInUser = UserProfileModel.objects.get(id = request.user.id)  // get the user that is logged in
-  #  loggedInUserHobbies = loggedInUser.hobby // get logged in users all hobbies // .hobby is from class UserProfileModel
-   # otherUsers = UserProfileModel.objects.exclude(id = request.user.id)  //get all users except the logged in one
-
-    #similarUsers = [] // create empty array
-
-    #for otherUser in otherUsers:
-     #   counter = 0
-      #  for h in otherUser.hobby:
-       #     if otherUser.hobby in loggedInUserHobbies:
-        #        counter++ // increment each time a user with same hobby is found, but reset counter when new user is checked
-            
-        #similarUsers.append(otherUser) // user has same Hobby(ies) as logged in user so we add it to the list
-
-    #sortedUsers = function // function to sort list of users, ordering by number of similar hobbies as loggedin user
-
-#def index(request):
-#    loggedInUser = UserProfileModel.objects.get(id = request.user.id) // get the user that is logged in
-#    loggedInUsersHobbies = loggedInUser.hobby // get logged in users all hobbies // .hobby is from class UserProfileModel
-#    otherUsers = UserProfileModel.objects.exclude(id=request.user.id) // get all users except the logged in one
-#    
-#    similarUsers = []  // create empty array
-
-#    for otherUser in otherUsers:
-#       counter=0
-#       for h in otherUser.hobby:
-#           if otherUser.hobby in loggedInUserHobbies:
-#               counter++ // increment each time a user with same hobbie is found, but reset counter when new user checked
-#       similarUsers.append(otherUser) // user has same hobby(ies) as logged in user so we add it to list
-
-#    sortedUsers = function // function to sort list of users, ordering by number of similar hobbies as loggedin user
-
-#    context = {
-#        'members' : sortedUsers // users will be displayed in the order in the index.html
-#    }
-#    return render(request, 'FriendZoneApp/index.html', context)
-    #context = {
-     #   'members' : sortedUsers, // users will be displayed in the order in the index.html
-    #}
-    #return render(request, 'FriendZoneApp/index.html', context)
