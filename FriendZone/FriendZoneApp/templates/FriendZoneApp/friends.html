@@ -1,11 +1,34 @@
 {% extends "FriendZoneApp/header.html" %}
-
 {% block content %}
-    <h1>My Friends</h1> 
-    List:
-    {% for friends in userFriends.all %}
-        <p> <a href="/profile/{{ userProfile.id }}"> {{ friends }}  </a> </p>
-    {% endfor %}
+{% load staticfiles %}
 
+<link rel="stylesheet" type="text/css" href="{% static 'friends.css' %}"/>
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+    <div class="container">
+        <center>
+      <!-- Page Heading -->
+        <h1 class="my-4">My Friends
+        </h1>
+        </center>
+
+        {% for friends in userFriends.all %}
+            <div class="row">
+                <div class="col-md-7">
+                <center> 
+                <br>
+                <br>
+                    <img class="img-fluid rounded mb-3 mb-md-0" src="{{ friends.image.url }}" alt="" width = "200">
+                </a>
+                </center>
+            </div>
+            <div class="col-md-1">
+                <br></br><h3><a href="/profile/{{ friends.id }}"> {{ friends }}</a></h3>
+                <a class="btn btn-danger btn-sm" href= "/removeFriend/{{ userProfile.id }}/{{ friends.id }}">Remove Friend</a>
+            </div>
+        {% endfor %}
+    </div>
+    <br><br><br><br>
+    </div>
 
 {% endblock %}

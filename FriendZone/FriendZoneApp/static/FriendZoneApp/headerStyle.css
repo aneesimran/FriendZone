@@ -3,6 +3,11 @@
     float: left;
 }
 
+body{
+    background: #EEEEEE;
+}
+
+
 #title{
     text-align: center;
     font-size: 40pt;
@@ -17,7 +22,7 @@
 
 #headerBar
 {
-    background-color: purple;
+    background-color: #673AB7;
     width: 100%;
     margin-left: -0.5%;
     padding-left: 1%;
@@ -40,4 +45,3 @@
 #navlinks{
     padding: 10px;
 }
-

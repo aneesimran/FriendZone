@@ -1,67 +1,65 @@
 {% extends "FriendZoneApp/header.html" %}
 {% block content %}
-
-    {% if loggedin %}
-        <table>
-            <tr>
-                <td>
-                    {% if profile.image %}
-                        <img></img>
-                    {% else %}
-                        <img></img>
-                    {% endif %}
-                </td>
-                <td>
-                </td>
-            </tr>
-        
-        </table>
-    {% else %}
-
-        <br>
-        <br>
-    {% endif %}
-
-        
-        Logged in Users Profile ID: {{ userProfile.id }}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
         <a href="/profile/{{ userProfile.id }}"> My Profile </a>
 
-        <br/> 
+    <div class = "container">
 
+      <div class="container">
+        <center/>
         <div class = "main">
-        Find friends with similar hobbies !
-        <table id='table' border="solid">
+        <h3> Find friends with similar hobbies </h3> 
+
+        Filter Gender:
+         <input type='radio' id='maleFilter' name='genderFilter' value='F'> Female
+          <input type='radio' id='femaleFilter' name='genderFilter' value='M'> Male
+
+            <br/>
+
+          Filter Age:
+          <input type='radio' id='lessThan10' name='ageFilter' value='lessThan10'> &lt; 10
+          <input type='radio' id='11-20' name='ageFilter' value='11-20'> 11-20
+          <input type='radio' id='21-30' name='ageFilter' value='21-30'> 21-30
+          <input type='radio' id='31-40' name='ageFilter' value='31-40'> 31-40
+          <input type='radio' id='moreThan41' name='ageFilter' value='moreThan41'> &gt; 41
+            <br/>
+
+        <center> <button class="btn btn-success" id='filterButton'>Filter</button> <center/>
+        </div>
+      </div>
+
+          <div class ="container">
+
+        <div class="table-responsive">
+        <table class ="table table-hover" id='table' border="solid">
+          <thead>
+            <tr>
+                <th scope="col">Users</th>
+                <th scope="col">Hobbies</th>
+                <th scope="col">Add Friend?</th>
+            </tr>
+          </thead>
         {% for member in sortedUsers %}
             <tr>
-                <td> <a href="/profile/{{ member.0 }}"> {{ member.1 }} {{ member.2 }}</a> </td>
-                <td><b>Hobbies: </b><br/>
-                    {% for h in member.3 %} 
-                        {{ h }} <br/>
+                <td class="active"> <a href="/profile/{{ member.0 }}"> {{ member.1 }} {{ member.2 }}</a> </td>
+                <td class="active">
+                    {% for h in member.3 %}
+                        {{ h }},
                     {% endfor %}
                 </td>
-                <td> <a href= "/addFriend/{{ userProfile.id }}/{{ member.0 }}" > <button> Add Friend </button> </a> </td>
+                <td class="active"> <a href= "/addFriend/{{ userProfile.id }}/{{ member.0 }}" ><center><button id= 'addFriendButton' class ="btn btn-info" onclick="confirm()"> Add Friend </button><center/> </a> </td>
             </tr>
         {% endfor %}
         </table>
         </div>
-
-        <br/>
-
-
-        <br/>
-Filter Gender: 
-        <input type='radio' id='maleFilter' name='genderFilter' value='F'> Female
-        <input type='radio' id='femaleFilter' name='genderFilter' value='M'> Male
         
-        <br/>
-        Filter Age: 
-        <input type='radio' id='lessThan10' name='ageFilter' value='lessThan10'> &lt; 10
-        <input type='radio' id='11-20' name='ageFilter' value='11-20'> 11-20
-        <input type='radio' id='21-30' name='ageFilter' value='21-30'> 21-30
-        <input type='radio' id='31-40' name='ageFilter' value='31-40'> 31-40
-        <input type='radio' id='moreThan41' name='ageFilter' value='moreThan41'> &gt; 41
-        <br/>
-        <button id='filterButton'>Filter</button>
+      </div>
         <textarea id='userProfileIDLabelled'>{{ userProfile.id }}</textarea>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
@@ -99,14 +97,14 @@ $('#filterButton').click(function(e){
             else {
                 console.log("IT WAS NOT CHECKED CUZ");
             }
-            
+
             var chosenOption = "test";
             if ($("#maleFilter")[0].checked ){
                 chosenOption = $("#maleFilter")[0].value;
             }
             else if ($("#femaleFilter")[0].checked ) {
                 chosenOption = $("#femaleFilter")[0].value;
-            } 
+            }
             var userID = $("#userProfileIDLabelled").val();
             $.ajax({
                 type: 'GET',
@@ -117,7 +115,7 @@ $('#filterButton').click(function(e){
                 },
                 success: function(data){
                     console.log(data);
-                    var tbl = document.getElementById('table'); 
+                    var tbl = document.getElementById('table');
                     //if(tbl) tbl.parentNode.removeChild(tbl);
                     var obj = JSON.parse(data);
                     console.log(obj);
@@ -126,16 +124,23 @@ $('#filterButton').click(function(e){
                     $('#table tr').remove();
                     for (var i=0; i<2; i++){
                         console.log(obj)
-                        $('#table').append("<tr><td> <a href='/profile/" + obj[i].pk + "'> "+ obj[i].fields.first_name + " " + obj[i].fields.last_name +"</a> </td> <td> " + obj[i].fields.hobby + "</td> <td> <a href='/addFriend/" + userID + "/" + obj[i].pk + "'> <button> Add Friend </button> </a>" + obj[i].fields.age + " </td> </tr>");
-                    }           //<td> <a href = "/profile/{{ member.0 }}"> {{ member.1 }} {{ member.2}} </a> </td>      
+                        $('#table').append("<tr><td> <a href='/profile/" + obj[i].pk + "'> "+ obj[i].fields.first_name + " " + obj[i].fields.last_name +"</a> </td> <td> " + obj[i].fields.hobby + "</td> <td> <a href='/addFriend/" + userID + "/" + obj[i].pk + "'> <button id= 'addFriendButton' class ='btn btn-info'> Add Friend </button> </a> </td> </tr>");
+                        //addHandlers();
+                    }
+                    
                 },
                 //error: function(request,msg,error) {
                     //alert('Saink in updating (PUT) went wrong!');
                 //}
             })
         });
-</script>
 
-               
+//function addHandlers(){
+    function confirm(){
+        alert("Friend added!");
+    }
+//}
+//$(addHandlers);
+</script>
 
 {% endblock %}

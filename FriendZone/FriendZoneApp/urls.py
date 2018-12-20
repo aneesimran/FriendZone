@@ -14,6 +14,7 @@ urlpatterns = [
     path('editprofile/', views.editprofile_view, name='editprofile'),
     path('password/', views.forgotpassword_view, name='forgotpassword'),
     path('addFriend/<int:userProfileID>/<int:newFriendID>/', views.addFriend, name='addFriend'),
+    path('removeFriend/<int:userProfileID>/<int:friendID>/', views.removeFriend, name='removeFriend'),
     path('addHobby/<int:userProfileID>/<hobb>', views.addHobby, name='addHobby'),
     path('filterUsers/', views.filterUsers, name='filterUsers'),
     path('friends/<int:userProfileID>', views.listFriends, name='listFriends')

@@ -1,12 +1,35 @@
 {% extends "FriendZoneApp/header.html" %}
-
+{% extends "FriendZoneApp/styles.css"}
 {% block content %}
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-    <h2> {{ pageTitle }} - Log in</h2>
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+    <div class = "container">
+      <div class = "col-xs-4 col-xs-offset-4">
+        <div class="panel panel-primary">
+        <div class="panel-heading">Login</div>
+        <div class = "panel-body">
+
     <form class="login-form" action="{% url 'fz:login' %}" method="POST">
         {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Login">
+        {{ form.as_p }}
+        <center><input class = "btn btn-info btn-block" type="submit" value="Login"> </center><br/>
+        <a href='/register/', views.register_view, name='register' class="btn btn-warning btn-block" role="button">Register</a>
     </form>
 
+    </div>
+
+
+      </div>
+      </div>
+    </div>
 {% endblock %}
+</body>

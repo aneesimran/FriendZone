@@ -1,30 +1,109 @@
+
+
+
+
+
 {% extends "FriendZoneApp/header.html" %}
 {% block content %}
+{% load staticfiles %}
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'profileStyle2.css' %}"/>
 
-{% if userProfile %}
-    {% if userProfile.image %}
-        <img src="{{ userProfile.image.url }}" width = "200">
-    {% else %}
-        <img src = "/media/default.jpg" width = "200">
-    {% endif %}
-{% else %}
-    Error 1628 : Profile Image Error
-{% endif %}
 
-<p>Username: {{ userProfile.user }}</p>
-<p>First Name: {{ userProfile.first_name }}</p>
-<p>Last Name: {{ userProfile.last_name }}</p>
-{% if userProfile.gender == 'M' %}
-    <p>Gender: Male<p>
-{% elif userProfile.gender == 'F' %}
-    <p>Gender: Female</p>
-{% endif %}
-<p>Age: {{ userProfile.age }}
-<p>Email: {{ userProfile.email }}</p>
-<h2>Hobbies:</h2>
-{% for h in userProfile.hobby.all %}
-    <p>{{ h.hobby }}</p>
-{% endfor %}
+<div class="container">
+    <div class="row profile">
+		<div class="col-md-3">
+			<div class="profile-sidebar">
+				<!-- SIDEBAR USERPIC -->
+				<div class="profile-userpic">
+                {% if userProfile %}
+                    {% if userProfile.image %}
+                        <img src="{{ userProfile.image.url }}" class="img-responsive" alt="">
+                    {% else %}
+                        <img src = "/media/default.jpg" class="img-responsive" alt="">
+                    {% endif %}
+                {% else %}
+                    Error 1628 : Profile Image Error
+                {% endif %}
+					
+				</div>
+				<!-- END SIDEBAR USERPIC -->
+				<!-- SIDEBAR USER TITLE -->
+				<div class="profile-usertitle">
+					<div class="profile-usertitle-name">
+						{{ userProfile.first_name }} {{ userProfile.last_name }}
+					</div>
+					<div class="profile-gender-age">
+                        {% if userProfile.gender == 'M' %}
+                            Gender: Male &nbsp Age: {{ userProfile.age }} 
+                        {% elif userProfile.gender == 'F' %}
+                            Gender: Female &nbsp Age: {{ userProfile.age }} 
+                        {% endif %}
+            <br>
+              {{ userProfile.email }}
+            </br>
+					</div>
+				</div>
+				<!-- END SIDEBAR USER TITLE -->
+				<!-- SIDEBAR BUTTONS -->
+				<div class="profile-userbuttons">
+                    <a href='/friends/1', class="btn btn-success btn-sm" role="button">Friends</a>
+                    <a href='/index/', class="btn btn-danger btn-sm" role="button">Home</a>
+				</div>
+				<!-- END SIDEBAR BUTTONS -->
+				<!-- SIDEBAR MENU -->
+				<div class="profile-usermenu">
+					<ul class="nav">
+						<li class="active">
+							<a href="#">
+							<i class="glyphicon glyphicon-home"></i>
+							Overview </a>
+						</li>
+						<li>
+							<a href='/editprofile/', views.editprofile_view, name='editprofile'>
+							<i class="glyphicon glyphicon-user"></i>
+							Account Settings </a>
+						</li>
+						<li>
+							<a href='/editprofile/', views.editprofile_view, name='editprofile'>
+							<i class="glyphicon glyphicon-ok"></i>
+							Add bio </a>
+						</li>
 
+					</ul>
+				</div>
+				<!-- END MENU -->
+			</div>
+		</div>
+
+		<div class="col-md-9">
+      <div class="profile-hobbies-heading">
+        <div class="profile-hobbies-title">
+                  <strong>Profile</strong>
+        </div>
+      </div>
+
+      <div class="profile-content">
+        <h3>Bio:</h3>
+        <h4>{{ userProfile.profileBio }}</h4>
+        <br>
+        <h3>Hobbies:</h3>
+        {% for h in userProfile.hobby.all %}
+            <h4>{{ h.hobby }}</h4>
+            {% endfor %}
+            <div class="profile-userbuttonsAddHobbie">
+              <a href='/editprofile/', views.editprofile_view, name='editprofile' class="btn btn-success btn-sm" role="button">Add hobbies</a>
+    				</div>
+      </div>
+		</div>
+	</div>
+</div>
+<center>
+<strong>Powered by ITL'S FINEST<a href="" target="_blank"></a></strong>
+</center>
+<br>
+<br>
 
 {% endblock %}

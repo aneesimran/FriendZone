@@ -15,7 +15,8 @@ class EditProfileForm(UserChangeForm):
             'last_name',
             'gender',
             'image',
-            'hobby'
+            'hobby',
+            'profileBio'
         ]
 
 

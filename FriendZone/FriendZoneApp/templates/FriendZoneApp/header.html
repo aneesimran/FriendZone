@@ -1,16 +1,14 @@
-
 {% load staticfiles %}
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
     <head>
         <meta charset="utf-8">
-        <title>{{ pageTitle }}</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="{% static 'FriendZoneApp/headerStyle.css' %}" />
-        <style>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        </style>
+          <link rel="stylesheet" type="text/css" href="{% static 'FriendZoneApp/styles.css' %}" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
+       <title>{{ pageTitle }}</title>
     </head>
 
     <body>
@@ -23,30 +21,32 @@
         <p id="title">FriendZone {{ pageTitle }}  </p>
 
         <nav id='navlinks'>
-            <a href="">Link 1 </a> &nbsp;
+
             {% if user.is_authenticated %}
             {% else %}
-                <a href="/register/">Sign Up </a> &nbsp;
             {% endif %}
-            <a href="">Link 3 </a>
 
             <form class='logout-link' action="/logout/" method='POST'>
                 {% csrf_token %}
                 {% if user.is_authenticated %}
-                    <button type="submit" class="logoutButton"> Log out Now Bitch </button>
+
+                    <a href="/friends/1", views.friends_view, name="friends" class="btn btn-default">Friends  </a> &nbsp;
+                    <a href="/profile/{{ userProfile.id }}", view.profile_view, name="profile" class="btn btn-default">Profile</a>
+                    <button class = "btn btn-default" type="submit" class="logoutButton"> Log out </button>
+
                 {% endif %}
             </form>
         </nav>
-    </div>
+
 
     {% if user.is_authenticated %}
-        <p>Welcome !!!</p>
+        Welcome <b>{{ loggedInUser }}  <br/> <b/>
     {% else %}
-        <p>log in biatch</p>
+        <p>Please log in</p>
     {% endif %}
 
     {% block content %}
     {% endblock %}
-
+</div>
     </body>
 </html>

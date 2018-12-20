@@ -1,0 +1,47 @@
+#logoStyle{
+    padding-top: 2%;
+    float: left;
+}
+
+body{
+    background: #EEEEEE;
+  }
+
+
+#title{
+    text-align: center;
+    font-size: 40pt;
+    font-weight: 400;
+    margin-top: 3%;
+}
+
+#headerLinks
+{
+    float: right;
+}
+
+#headerBar
+{
+    background-color: #673AB7;
+    width: 100%;
+    margin-left: -0.5%;
+    padding-left: 1%;
+    padding-top: 1%;
+    margin-top: -3%;
+    height: 135px;
+}
+
+#navlinks
+{
+    margin-top: -5%;
+    font-size: 25px;
+    float: right;
+}
+
+#logoutButton{
+    float: right;
+}
+
+#navlinks{
+    padding: 10px;
+}

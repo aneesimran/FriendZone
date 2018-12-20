@@ -31,6 +31,7 @@ class UserProfileModel(models.Model):
     email = models.EmailField(blank = True, unique = True)
     hobby = models.ManyToManyField(Hobby, blank = True)
     friend = models.ManyToManyField('self', blank = True)
+    profileBio = models.CharField(max_length=254, blank = True)
     
     def __str__(self):
         return self.user.username
